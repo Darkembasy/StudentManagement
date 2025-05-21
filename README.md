@@ -28,6 +28,6 @@ This is a Django-based web application.
 5. ***select a folder**
    ```bash
    cd StudentManagementSystem
-3.**run a server**
+6. **run a server**
    ```bash 
    py manage.py runserver
