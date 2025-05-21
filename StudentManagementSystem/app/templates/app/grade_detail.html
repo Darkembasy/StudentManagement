@@ -1,0 +1,11 @@
+{% extends 'app/base.html' %}
+{% block content %}
+<h3>Grade Breakdown for {{ object.subject.name }}</h3>
+<ul class="list-group">
+    <li class="list-group-item">Activity: {{ object.activity }}</li>
+    <li class="list-group-item">Quiz: {{ object.quiz }}</li>
+    <li class="list-group-item">Mid-term exam: {{ object.mid_term_exam }}</li>
+    <li class="list-group-item">Final exam: {{ object.final_exam }}</li>
+</ul>
+<a href="{% url 'grade_update' object.pk %}">Edit Grade</a>
+{% endblock %}
