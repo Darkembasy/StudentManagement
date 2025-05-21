@@ -1,0 +1,13 @@
+{% extends 'app/base.html' %}
+{% block content %}
+<a href="{% url 'student_create' %}">Add Student</a>
+<ul class="list-group">
+    {% for student in object_list %}
+        <li class="list-group-item">
+            <a href="{% url 'student_detail' student.pk %}">{{ student.last_name }}{{ student.first_name }}</a>
+        </li>
+    {% empty %}
+        <li class="list-group-item">No students available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
