@@ -45,7 +45,7 @@ ROOT_URLCONF = 'StudentManagementSystem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR/ 'app/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
