@@ -14,7 +14,20 @@ This is a Django-based web application.
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/Darkembasy/StudentManagement/
+2. ***install a virtual env**
+   ```bash
+   python -m venv .venv
+3. ***activate a virtual env**
+   ```bash
+   .venv\Scripts\activate.bat
+4. ***install django and djangorestframework**
+   ```bash
+   pip install django
 
-2. **run a server**
+   pip install djangorestframework
+5. ***select a folder**
+   ```bash
+   cd StudentManagementSystem
+6. **run a server**
    ```bash 
    py manage.py runserver
