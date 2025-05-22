@@ -29,3 +29,28 @@ class Grade(models.Model):
 
     def __str__(self):
         return f"{self.subject.name} - Grades"
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+#Check if the file is a valid type for uploading documents
+def validate_file_type(value):
+    ext = os.path.splitext(value.name)[1].lower()
+    valid_extensions = ['.pdf', '.jpg', '.jpeg', '.png','.doc', '.docx', '.txt','.xls', '.xlsx', '.ppt', '.pptx', '.zip', '.rar']
+    if ext not in valid_extensions:
+        raise ValidationError('Unsupported file type.')
+
+class Document(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='documents')
+    title = models.CharField(max_length=200)
+    file = models.FileField(upload_to='documents/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

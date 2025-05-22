@@ -2,7 +2,7 @@ from django.urls import path
 from .views import indexViewPage, studentViewPage
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import StudentViewSet, SubjectViewSet, GradeViewSet
+from .views import StudentViewSet, SubjectViewSet, GradeViewSet, PostListView
 from .views import *
 
 
@@ -27,4 +27,6 @@ urlpatterns = [
     path('grades/create/', GradeCreateView.as_view(), name='grade_create'),
     path('grades/<int:pk>/update/', GradeUpdateView.as_view(), name='grade_update'),
 
+    #Post
+    path('post/', PostListView.as_view(), name='post'),
 ]

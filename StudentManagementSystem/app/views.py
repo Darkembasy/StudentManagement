@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView,ListView,DetailView, CreateView, UpdateView, DeleteView
 from rest_framework import viewsets
-from .models import Student, Subject, Grade
+from .models import Student, Subject, Grade, Post,Document
 from .serializers import StudentSerializer, SubjectSerializer, GradeSerializer
 from django.urls import reverse_lazy
 
@@ -73,4 +73,8 @@ class StudentDeleteView(DeleteView):
     model = Student
     template_name = 'app/student_delete.html'
     success_url = reverse_lazy('student_list')
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'app/post_list.html'
 
