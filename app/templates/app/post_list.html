@@ -1,0 +1,10 @@
+{% extends 'app/base.html' %}
+{% block content %}
+<h1>Posts</h1>
+    {% for post in post_list %}
+        <div class ="post-entry">
+            <h2><a href="">{{post}}</a></h2>
+            <p>{{post.body}}</p>
+        </div>
+    {% endfor %}
+{% endblock %}
