@@ -1,0 +1,12 @@
+{% extends 'app/base.html' %}
+{% block content %}
+<h1>Posts</h1>
+    
+    <div class ="post-entry">
+        <h2><a href="{% url 'post_detail' post.pk%}">{{post}}</a></h2>
+        <p>{{post.created_at}}</p>
+        <p>{{post.body}}</p>
+        
+    </div>
+    
+{% endblock %}
