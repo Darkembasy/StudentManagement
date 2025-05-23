@@ -1,9 +1,10 @@
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.views.generic import TemplateView,ListView,DetailView, CreateView, UpdateView, DeleteView
 from rest_framework import viewsets
 from .models import Student, Subject, Grade, Post,Document
 from .serializers import StudentSerializer, SubjectSerializer, GradeSerializer
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 # Create your views here.
 
@@ -12,8 +13,44 @@ class SubjectListView(ListView):
     template_name = 'app/subject_list.html'
 
     def get_queryset(self):
-        student_id = self.kwargs['student_id']
-        return Subject.objects.filter(student__id=student_id)
+        self.student = get_object_or_404(Student, pk=self.kwargs['student_id'])
+        return Subject.objects.filter(student=self.student)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['student'] = self.student
+        return context
+
+
+    # Add subject for a student
+class SubjectCreateView(CreateView):
+    model = Subject
+    fields = ['name']
+    template_name = 'app/subject_form.html'
+
+    def form_valid(self, form):
+        student = get_object_or_404(Student, pk=self.kwargs['student_id'])
+        form.instance.student = student
+        return super().form_valid(form)
+    def get_success_url(self):
+        return reverse('subject_list', kwargs={'student_id': self.kwargs['student_id']})
+
+    # Update a subject
+class SubjectUpdateView(UpdateView):
+    model = Subject
+    fields = ['name']
+    template_name = 'app/subject_form.html'
+
+    def get_success_url(self):
+        return reverse('subject_list', kwargs={'student_id': self.object.student.id})
+
+    # Delete a subject
+class SubjectDeleteView(DeleteView):
+    model = Subject
+    template_name = 'app/subject_delete.html'
+
+    def get_success_url(self):
+        return reverse('subject_list', kwargs={'student_id': self.object.student.id})
 
 class GradeDetailView(DetailView):
     model = Grade

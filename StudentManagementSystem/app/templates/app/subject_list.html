@@ -1,18 +1,20 @@
 {% extends 'app/base.html' %}
 {% block content %}
-<h3>Subjects for {{ view.get_queryset.0.student.name }}</h3>
+<h2>Subjects for {{ student.name }}</h2>
+
 <ul>
-    {% for subject in object_list %}
-        <li>
-            {{ subject.name }}
-            {% if subject.grades.first %}
-                <a href="{% url 'grade_detail' subject.grades.first.pk %}" class="btn btn-sm btn-outline-info float-end">View Grades</a>
-            {% else %}
-                <a href="{% url 'grade_create' %}?subject_id={{ subject.pk }}" class="btn btn-sm btn-outline-success float-end">Add Grades</a>
-            {% endif %}
-        </li>
-    {% empty %}
-        <li>No subjects available.</li>
-    {% endfor %}
+  {% for subject in object_list %}
+    <li>
+      {{ subject.name }}
+      [<a href="{% url 'subject_edit' subject.pk %}">Edit</a>]
+      [<a href="{% url 'subject_delete' subject.pk %}">Delete</a>]
+    </li>
+  {% empty %}
+    <li>No subjects found for this student.</li>
+  {% endfor %}
 </ul>
+
+<a href="{% url 'subject_add' student.id %}">➕ Add Subject</a>
+<br>
+<a href="{% url 'student_list' %}">⬅ Back to Students</a>
 {% endblock %}
