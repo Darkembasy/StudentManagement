@@ -71,7 +71,7 @@ button {
 .container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   max-width: 1600px;
   margin: 0 auto;
   column-gap: 2rem;

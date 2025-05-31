@@ -9,8 +9,9 @@ class Student(models.Model):
     age = models.IntegerField()
     email = models.EmailField()
 
+    
     def __str__(self):
-        return self.first_name
+        return self.first_name + ' ' + self.last_name
 
 class Subject(models.Model):
     name = models.CharField(max_length=100)
