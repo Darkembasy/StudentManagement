@@ -1,13 +1,116 @@
 {% extends 'app/base.html' %}
 {% block content %}
-<a href="{% url 'student_create' %}">Add Student</a>
-<ul class="list-group">
-    {% for student in object_list %}
-        <li class="list-group-item">
-            <a href="{% url 'student_detail' student.pk %}">{{ student.last_name }}{{ student.first_name }}</a>
-        </li>
-    {% empty %}
-        <li class="list-group-item">No students available.</li>
-    {% endfor %}
-</ul>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f2f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    .student-container {
+        max-width: 700px;
+        margin: 60px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .student-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .student-header h2 {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0;
+        color: #333;
+    }
+
+    .add-link {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+    .add-link:hover {
+        background-color: #0056b3;
+    }
+
+    .list-group {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .list-group-item {
+        background-color: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .list-group-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .list-group-item a {
+        color: #333;
+        font-size: 16px;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .list-group-item a:hover {
+        color: #007bff;
+        text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+        .student-container {
+            padding: 20px;
+        }
+
+        .student-header h2 {
+            font-size: 20px;
+        }
+
+        .add-link {
+            padding: 8px 14px;
+            font-size: 14px;
+        }
+
+        .list-group-item {
+            padding: 14px 16px;
+        }
+    }
+</style>
+<div class="student-container">
+    <div class="student-header">
+        <h2>Student List</h2>
+        <a href="{% url 'student_create' %}" class="add-link">Add Student</a>
+    </div>
+
+    <ul class="list-group">
+        {% for student in object_list %}
+            <li class="list-group-item">
+                <a href="{% url 'student_detail' student.pk %}">{{ student.last_name }}{{ student.first_name }}</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">No students available.</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
