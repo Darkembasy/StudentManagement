@@ -1,12 +1,36 @@
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
+from django.contrib import messages
 from django.views.generic import TemplateView,ListView,DetailView, CreateView, UpdateView, DeleteView
 from rest_framework import viewsets
 from .models import Student, Subject, Grade, Post,Document
 from .serializers import StudentSerializer, SubjectSerializer, GradeSerializer
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse, path
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
+def loginPage(request):
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request, "User does not exist.")
+        
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('base')
+        else:
+            messages.error(request, "Username or password does not exist.")
+            
+    context = {}
+    return render(request,'app/login_reg.html', context)
 
 class SubjectListView(ListView):
     model = Subject
