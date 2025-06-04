@@ -15,6 +15,7 @@ router.register(r'api/grades', GradeViewSet)
 urlpatterns = [
 
     path('login/', views.loginPage, name='login'),
+    path('logout/', views.logoutUser, name='logout'),
     path('', StudentListView.as_view(), name='student_list'),
     path('', include(router.urls)),
     path('base/',indexViewPage.as_view(),name='base'),
@@ -23,8 +24,6 @@ urlpatterns = [
     path('students/create/', StudentCreateView.as_view(), name='student_create'),
     path('students/<int:pk>/update/', StudentUpdateView.as_view(), name='student_update'),
     path('students/<int:pk>/delete/', StudentDeleteView.as_view(), name='student_delete'),
-
-
 
     path('students/<int:student_id>/subjects/', SubjectListView.as_view(), name='subject_list'),
     path('students/<int:student_id>/subjects/add/', SubjectCreateView.as_view(), name='subject_add'),

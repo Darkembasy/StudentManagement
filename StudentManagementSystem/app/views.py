@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.views.generic import TemplateView,ListView,DetailView, CreateView, UpdateView, DeleteView
 from rest_framework import viewsets
@@ -32,6 +32,9 @@ def loginPage(request):
     context = {}
     return render(request,'app/login_reg.html', context)
 
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
 class SubjectListView(ListView):
     model = Subject
     template_name = 'app/subject_list.html'
