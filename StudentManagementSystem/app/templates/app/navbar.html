@@ -15,16 +15,17 @@
           {% if request.user.is_authenticated %}
           <nav class="menu">
             <ul class="menu-bar">
-               <li><a class="nav-link" href="">Grades</a></li>
+               <li><a class="nav-link" href="{% url 'grade_detail' object.pk %}">Grades</a></li>
               <li><a class="nav-link" href="{% url 'post'%}">Announcements</a></li>
-              <li><a class="nav-link" href="{% url 'student_list'%}">My Info</a></li> 
+              <li><a class="nav-link" href="{% url 'student_list'%}">Student Info</a></li> 
             </ul>
           </nav>
         </div>
        
         <div class="nav-end">
           <div class="right-container">
-            <i class="fa fa-user-circle" style="font-size:40px;color:#2b72fb"></i>            
+            <i class="fa fa-user-circle" style="font-size:40px;color:#2b72fb"></i> 
+            <p>{{request.user}}</p>           
                 <button
                   class="nav-link dropdown-btn"
                   data-dropdown="dropdown2"
