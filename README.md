@@ -1,6 +1,14 @@
 # Student Management Project
 
-This is a Django-based web application.
+A comprehensive Django-based web application for managing student records, courses, and academic information. This system provides a RESTful API interface for seamless integration and data management.
+
+# Technology Stack
+
+- Backend: Django 
+- API: Django REST Framework
+- Database: SQLite
+- Frontend: HTML, CSS, JavaScript (Django Templates)
+- Python Version: 3.13.2 or higher
 
 ## Requirements
 
