@@ -1,0 +1,349 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f2f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    .grade-container {
+        max-width: 1200px;
+        margin: 60px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .grade-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .grade-header h2 {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0;
+        color: #333;
+    }
+
+    .add-link {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+    .add-link:hover {
+        background-color: #0056b3;
+    }
+
+    .search-container {
+        margin-bottom: 25px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex: 1;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+
+    .search-btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+    .search-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .clear-btn {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 12px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .clear-btn:hover {
+        background-color: #545b62;
+    }
+
+    .search-results {
+        margin-bottom: 15px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .grades-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .grades-table th {
+        background-color: #007bff;
+        color: white;
+        padding: 15px 12px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .grades-table td {
+        padding: 12px;
+        border-bottom: 1px solid #e0e0e0;
+        font-size: 14px;
+    }
+
+    .grades-table tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .grades-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .student-name {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .subject-name {
+        color: #666;
+        font-style: italic;
+    }
+
+    .grade-score {
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .avg-grade {
+        font-weight: 700;
+        color: #007bff;
+    }
+
+    .no-grades {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .detail-link {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .detail-link:hover {
+        text-decoration: underline;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+        gap: 5px;
+    }
+
+    .pagination a,
+    .pagination span {
+        padding: 8px 12px;
+        border: 1px solid #dee2e6;
+        color: #007bff;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    .pagination .current {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
+
+    @media (max-width: 768px) {
+        .grade-container {
+            padding: 20px;
+            margin: 20px;
+        }
+
+        .search-form {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-input {
+            margin-bottom: 10px;
+        }
+
+        .grades-table {
+            font-size: 12px;
+        }
+
+        .grades-table th,
+        .grades-table td {
+            padding: 8px 6px;
+        }
+
+        .grade-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 15px;
+        }
+
+        .grade-header h2 {
+            font-size: 20px;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="grade-container">
+    <div class="grade-header">
+        <h2>Student Grades</h2>
+        <a href="{% url 'grade_create' %}" class="add-link">Add Grade</a>
+    </div>
+
+    <!-- Search Form -->
+    <div class="search-container">
+        <form method="get" class="search-form">
+            <input 
+                type="text" 
+                name="search" 
+                value="{{ search_query }}" 
+                placeholder="Search by student name, ID, or subject..." 
+                class="search-input"
+            >
+            <button type="submit" class="search-btn">Search</button>
+            {% if search_query %}
+                <a href="{% url 'grade_list' %}" class="clear-btn">Clear</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Search Results Info -->
+    <div class="search-results">
+        {% if search_query %}
+            {% if grades %}
+                Showing {{ grades|length }} result{{ grades|length|pluralize }} for "{{ search_query }}" 
+                ({{ total_grades }} total grades)
+            {% else %}
+                No results found for "{{ search_query }}" ({{ total_grades }} total grades)
+            {% endif %}
+        {% else %}
+            Showing all {{ total_grades }} grade{{ total_grades|pluralize }}
+        {% endif %}
+    </div>
+
+    <!-- Grades Table -->
+    {% if grades %}
+        <table class="grades-table">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Subject</th>
+                    <th>Activity</th>
+                    <th>Quiz</th>
+                    <th>Midterm Exam</th>
+                    <th>Final Exam</th>
+                    <th>Average Grade</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for grade in grades %}
+                    <tr>
+                        <td class="student-name">
+                            {% if grade.subject.student %}
+                                {{ grade.subject.student.first_name }} {{ grade.subject.student.last_name }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td class="subject-name">{{ grade.subject.name }}</td>
+                        <td class="grade-score">{{ grade.activity|floatformat:1 }}</td>
+                        <td class="grade-score">{{ grade.quiz|floatformat:1 }}</td>
+                        <td class="grade-score">{{ grade.mid_term_exam|floatformat:1 }}</td>
+                        <td class="grade-score">{{ grade.final_exam|floatformat:1 }}</td>
+                        <td class="grade-score avg-grade">{{ grade.avg_grade|floatformat:1 }}</td>
+                        <td>
+                            <a href="{% url 'grade_detail' grade.pk %}" class="detail-link">View Details</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}page=1">&laquo; First</a>
+                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="no-grades">
+            {% if search_query %}
+                <p>No grades found matching "{{ search_query }}"</p>
+                <a href="{% url 'grade_list' %}" class="clear-btn">Show All Grades</a>
+            {% else %}
+                <p>No student grades available.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

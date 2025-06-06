@@ -2,7 +2,7 @@ from django.urls import path
 from .views import indexViewPage,studentViewPage
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import StudentViewSet, SubjectViewSet, GradeViewSet, PostListView, PostDetailView, loginPage
+from .views import StudentViewSet, SubjectViewSet, GradeViewSet, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, loginPage
 from .views import *
 from . import views
 
@@ -31,6 +31,7 @@ urlpatterns = [
     path('subjects/<int:pk>/edit/', SubjectUpdateView.as_view(), name='subject_edit'),
     path('subjects/<int:pk>/delete/', SubjectDeleteView.as_view(), name='subject_delete'),
 
+    path('grades/', views.GradeListView.as_view(), name='grade_list'),
     path('grades/<int:pk>/', GradeDetailView.as_view(), name='grade_detail'),
     path('grades/create/', GradeCreateView.as_view(), name='grade_create'),
     path('grades/<int:pk>/update/', GradeUpdateView.as_view(), name='grade_update'),
@@ -38,4 +39,7 @@ urlpatterns = [
     #Post
     path('post/', PostListView.as_view(), name='post'),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post_detail'),
+    path('post/create/', PostCreateView.as_view(), name='post_create'),
+    path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post_update'),
+    path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post_delete'),
 ]

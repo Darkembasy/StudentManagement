@@ -99,10 +99,40 @@ class SubjectDeleteView(DeleteView):
     def get_success_url(self):
         return reverse('subject_list', kwargs={'student_id': self.object.student.id})
 
+class GradeListView(ListView):
+    model = Grade
+    template_name = 'app/grade_list.html'
+    context_object_name = 'grades'
+    paginate_by = 20
+    
+    def get_queryset(self):
+        # Always start with all grades, optimized with select_related
+        queryset = Grade.objects.all().select_related('subject', 'subject__student')
+        
+        # Get search query from GET parameters
+        search_query = self.request.GET.get('search', '').strip()
+        
+        # Only filter if there's actually a search query
+        if search_query:
+            queryset = queryset.filter(
+                Q(subject__student__first_name__icontains=search_query) |
+                Q(subject__student__last_name__icontains=search_query) |
+                Q(subject__student__student_id__icontains=search_query) |
+                Q(subject__name__icontains=search_query) |
+                Q(subject__code__icontains=search_query)
+            ).distinct()
+        
+        return queryset.order_by('subject__student__last_name', 'subject__student__first_name', 'subject__name')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('search', '')
+        context['total_grades'] = Grade.objects.count()
+        return context
+
 class GradeDetailView(DetailView):
     model = Grade
     template_name = 'app/grade_detail.html'
-
 
 class GradeCreateView(CreateView):
     model = Grade
@@ -167,5 +197,27 @@ class PostDetailView(DetailView):
     model = Post
     context_object_name = 'post'
     template_name = 'app/post_detail.html'
+
+class PostCreateView(CreateView):
+    model = Post
+    fields = ['title', 'body']  # Don't include 'author' in fields
+    template_name = 'app/post_create.html'
+    success_url = reverse_lazy('post_detail')
+    
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
+
+class PostUpdateView(UpdateView):
+    model = Post
+    fields = ['title', 'content']
+    template_name = 'app/post_edit.html'
+    success_url = reverse_lazy('post_list')
+
+class PostDeleteView(DeleteView):
+    model = Post
+    template_name = 'app/post_delete.html'
+    success_url = reverse_lazy('post_list')
 
 

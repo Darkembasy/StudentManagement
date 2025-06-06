@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.urls import reverse   
 
 # Create your models here.
 class Student(models.Model):
@@ -41,6 +41,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse_lazy('post_detail', kwargs={'pk': self.object.pk})
 
 #Check if the file is a valid type for uploading documents
 def validate_file_type(value):
