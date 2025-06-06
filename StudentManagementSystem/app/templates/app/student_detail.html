@@ -1,12 +1,77 @@
 {% extends 'app/base.html' %}
 {% block content %}
+<style>
+    .student-card {
+        background-color: #fff;
+        padding: 2rem 2.5rem;
+        border-radius: 12px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+        max-width: 600px;
+        margin: 3rem auto;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .student-card h2 {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 1rem;
+    }
+
+    .student-card p {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 0.5rem;
+    }
+
+    .student-card .actions {
+        margin-top: 2rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .student-card .actions a {
+        background-color: #007bff;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .student-card .actions a:hover {
+        background-color: #0056b3;
+    }
+
+    .student-card .actions a.delete {
+        background-color: #dc3545;
+    }
+
+    .student-card .actions a.delete:hover {
+        background-color: #bb2d3b;
+    }
+
+    .student-card .actions a.secondary {
+        background-color: #6c757d;
+    }
+
+    .student-card .actions a.secondary:hover {
+        background-color: #5a6268;
+    }
+</style>
+
+<div class="student-card">
     <h2>{{ object.name }}</h2>
     <p>Age: {{ object.age }}</p>
     <p>Email: {{ object.email }}</p>
     <p>Section: {{ object.section }}</p>
 
-    <a href="{% url 'student_update' object.pk %}">Edit</a>
-    <a href="{% url 'student_delete' object.pk %}">Delete</a>
-    <a href="{% url 'subject_list' object.pk %}">View Subjects</a>
-    <a href="{% url 'student_list' %}">Back</a>
+    <div class="actions">
+        <a href="{% url 'student_update' object.pk %}">Edit</a>
+        <a href="{% url 'student_delete' object.pk %}" class="delete">Delete</a>
+        <a href="{% url 'subject_list' object.pk %}" class="secondary">View Subjects</a>
+        <a href="{% url 'student_list' %}" class="secondary">Back</a>
+    </div>
+</div>
 {% endblock %}

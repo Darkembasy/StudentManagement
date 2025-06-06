@@ -1,11 +1,201 @@
 {% extends 'app/base.html' %}
 {% block content %}
-<h2>Are you sure you want to delete the subject "{{ object.name }}"?</h2>
+<style>
+/* Delete Confirmation Styling */
+.delete-confirmation-container {
+  max-width: 500px;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-top: 4px solid #e74c3c;
+}
 
-<form method="post">
-  {% csrf_token %}
-  <button type="submit">🗑 Confirm Delete</button>
-</form>
+.delete-warning-header {
+  color: #e74c3c;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+  line-height: 1.4;
+}
 
-<a href="{% url 'subject_list' object.student.id %}">⬅ Cancel</a>
+.subject-name-highlight {
+  color: #c0392b;
+  font-weight: 700;
+  background: #fdf2f2;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #fadbd8;
+}
+
+/* Warning icon */
+.warning-icon {
+  font-size: 4rem;
+  color: #f39c12;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Form and actions styling */
+.delete-form {
+  margin-bottom: 1.5rem;
+}
+
+.confirmation-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+/* Delete button styling */
+.btn-delete {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.btn-delete:hover {
+  background: linear-gradient(135deg, #c0392b, #a93226);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+.btn-delete:active {
+  transform: translateY(0);
+}
+
+/* Cancel button styling */
+.btn-cancel {
+  background: #95a5a6;
+  color: white;
+  text-decoration: none;
+  padding: 1rem 2.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 2px solid #95a5a6;
+}
+
+.btn-cancel:hover {
+  background: #7f8c8d;
+  border-color: #7f8c8d;
+  text-decoration: none;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(149, 165, 166, 0.3);
+}
+
+/* Warning message box */
+.warning-message {
+  background: #fef9e7;
+  border: 1px solid #f4d03f;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  color: #856404;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.warning-message strong {
+  color: #b7950b;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .delete-confirmation-container {
+    margin: 2rem 1rem;
+    padding: 2rem;
+  }
+  
+  .delete-warning-header {
+    font-size: 1.3rem;
+  }
+  
+  .confirmation-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-delete,
+  .btn-cancel {
+    width: 100%;
+    max-width: 250px;
+    justify-content: center;
+  }
+  
+  .warning-icon {
+    font-size: 3rem;
+  }
+}
+
+/* Focus states for accessibility */
+.btn-delete:focus,
+.btn-cancel:focus {
+  outline: 3px solid rgba(52, 152, 219, 0.5);
+  outline-offset: 2px;
+}
+
+/* Animation for container */
+.delete-confirmation-container {
+  animation: slideInDown 0.4s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+<div class="delete-confirmation-container">
+  <div class="warning-icon">⚠️</div>
+  
+  <h2 class="delete-warning-header">
+    Are you sure you want to delete the subject 
+    <span class="subject-name-highlight">"{{ object.name }}"</span>?
+  </h2>
+
+  <div class="warning-message">
+    <strong>Warning:</strong> This action cannot be undone. All data associated with this subject will be permanently deleted.
+  </div>
+
+  <form method="post" class="delete-form">
+    {% csrf_token %}
+    <div class="confirmation-actions">
+      <button type="submit" class="btn-delete">🗑 Confirm Delete</button>
+      <a href="{% url 'subject_list' object.student.id %}" class="btn-cancel">⬅ Cancel</a>
+    </div>
+  </form>
+</div>
 {% endblock %}

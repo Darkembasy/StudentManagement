@@ -1,12 +1,84 @@
 {% extends 'app/base.html' %}
 {% block content %}
-<h1>Posts</h1>
+<style>
+    .post-card {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+        max-width: 700px;
+        margin: 3rem auto;
+    }
+
+    .post-card a.back-link {
+        display: inline-block;
+        margin-bottom: 1rem;
+        text-decoration: none;
+        color: #007bff;
+        font-weight: 500;
+    }
+
+    .post-card a.back-link:hover {
+        text-decoration: underline;
+    }
+
+    .post-card h2 {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    .post-card p.date {
+        color: #888;
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .post-card p.body {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: #444;
+        margin-bottom: 2rem;
+    }
+
+    .post-card .actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .post-card .actions a {
+        background-color: #007bff;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .post-card .actions a:hover {
+        background-color: #0056b3;
+    }
+
+    .post-card .actions a.delete {
+        background-color: #dc3545;
+    }
+
+    .post-card .actions a.delete:hover {
+        background-color: #bb2d3b;
+    }
+</style>
+
+<div class="post-card">
+    <a href="{% url 'post' %}" class="back-link">← Back</a>
     
-    <div class ="post-entry">
-        <h2><a href="{% url 'post_detail' post.pk%}">{{post}}</a></h2>
-        <p>{{post.created_at}}</p>
-        <p>{{post.body}}</p>
-        
+    <h2>{{ post.title }}</h2>
+    <p class="date">Posted on {{ post.created_at }}</p>
+    <p class="body">{{ post.body }}</p>
+
+    <div class="actions">
+        <a href="{% url 'post_update' post.pk %}">Edit</a>
+        <a href="{% url 'post_delete' post.pk %}" class="delete">Delete</a>
     </div>
-    
+</div>
 {% endblock %}

@@ -1,9 +1,314 @@
 {% extends 'app/base.html' %}
 {% block content %}
-<form method="post">
+<style>
+/* Student Form Styling */
+.student-form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #3498db;
+}
+
+.form-header {
+  color: #2c3e50;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 1rem;
+}
+
+/* Form styling */
+.student-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Form field styling */
+.student-form p {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  position: relative;
+}
+
+.student-form label {
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.student-form input,
+.student-form select,
+.student-form textarea {
+  padding: 0.875rem;
+  border: 2px solid #e0e6ed;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+  font-family: inherit;
+}
+
+.student-form input:focus,
+.student-form select:focus,
+.student-form textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+  background-color: #fafbfc;
+}
+
+.student-form input:hover,
+.student-form select:hover,
+.student-form textarea:hover {
+  border-color: #bdc3c7;
+}
+
+/* Textarea specific styling */
+.student-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Error styling */
+.student-form .errorlist {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+}
+
+.student-form .errorlist li {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: #fdf2f2;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border-left: 3px solid #e74c3c;
+}
+
+/* Help text styling */
+.student-form .helptext {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+/* Form actions */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #ecf0f1;
+  flex-wrap: wrap;
+}
+
+/* Save button styling */
+.btn-save {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+}
+
+.btn-save:hover {
+  background: linear-gradient(135deg, #229954, #27ae60);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+}
+
+.btn-save:active {
+  transform: translateY(0);
+}
+
+/* Back button styling */
+.btn-back {
+  background: #6c757d;
+  color: white;
+  text-decoration: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 2px solid #6c757d;
+}
+
+.btn-back:hover {
+  background: #5a6268;
+  border-color: #5a6268;
+  text-decoration: none;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+/* Required field indicator */
+.student-form label.required::after {
+  content: " *";
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+/* Floating label effect for focused inputs */
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.form-group.focused label {
+  color: #3498db;
+  transform: scale(0.9);
+}
+
+/* Success message styling */
+.success-message {
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  color: #155724;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #28a745;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+/* Loading state */
+.btn-save.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn-save.loading::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 0.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .student-form-container {
+    margin: 1rem;
+    padding: 2rem;
+  }
+  
+  .form-header {
+    font-size: 1.5rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .btn-save,
+  .btn-back {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Focus states for accessibility */
+.btn-save:focus,
+.btn-back:focus {
+  outline: 3px solid rgba(52, 152, 219, 0.5);
+  outline-offset: 2px;
+}
+
+/* Animation for container */
+.student-form-container {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+<div class="student-form-container">
+  <h2 class="form-header">👨‍🎓 Student Information</h2>
+  
+  <form method="post" class="student-form">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Save</button>
-    <a href="{% url 'student_list' %}">Back</a>
-</form>
+    
+    <div class="form-actions">
+      <button type="submit" class="btn-save">💾 Save Student</button>
+      <a href="{% url 'student_list' %}" class="btn-back">⬅ Back to List</a>
+    </div>
+  </form>
+</div>
+
+<script>
+// Add focus effects and form enhancements
+document.addEventListener('DOMContentLoaded', function() {
+  const inputs = document.querySelectorAll('input, select, textarea');
+  
+  inputs.forEach(input => {
+    const formGroup = input.closest('p');
+    
+    input.addEventListener('focus', function() {
+      if (formGroup) formGroup.classList.add('focused');
+    });
+    
+    input.addEventListener('blur', function() {
+      if (formGroup) formGroup.classList.remove('focused');
+    });
+  });
+
+  // Add loading state to save button
+  const form = document.querySelector('.student-form');
+  const saveBtn = document.querySelector('.btn-save');
+  
+  if (form && saveBtn) {
+    form.addEventListener('submit', function() {
+      saveBtn.classList.add('loading');
+      saveBtn.innerHTML = '💾 Saving...';
+    });
+  }
+});
+</script>
 {% endblock %}

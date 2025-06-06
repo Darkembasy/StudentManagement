@@ -1,6 +1,3 @@
-{% extends 'app/base.html' %}
-{% block content %}
-<style>
     .card {
         background-color: #fff;
         padding: 2rem 2.5rem;
@@ -65,16 +62,3 @@
     .btn-back:hover {
         background-color: #e0e0e0;
     }
-</style>
-
-<div class="card">
-    <h1>New Post</h1>
-
-    <form action="{% url 'post_create' %}" method="post">
-        {% csrf_token %}
-        <a href="{% url 'post' %}" class="btn-back">← Back</a>
-        {{ form.as_p }}
-        <input type="submit" value="Save">
-    </form>
-</div>
-{% endblock %}

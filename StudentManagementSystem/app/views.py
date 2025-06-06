@@ -29,7 +29,7 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
-            return redirect('base')
+            return redirect('student_list')
         else:
             messages.error(request, "Username or password does not exist.")
             
@@ -203,22 +203,25 @@ class PostCreateView(CreateView):
     model = Post
     fields = ['title', 'body']  # Don't include 'author' in fields
     template_name = 'app/post_create.html'
-    success_url = reverse_lazy('post_detail')
+   
     
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
     
-
+    def get_success_url(self):
+        return reverse('post_detail', kwargs={'pk': self.object.pk})
 class PostUpdateView(UpdateView):
     model = Post
-    fields = ['title', 'content']
+    fields = ['title', 'body']
     template_name = 'app/post_edit.html'
-    success_url = reverse_lazy('post_list')
+    
+
+    def get_success_url(self):
+        return reverse('post_detail', kwargs={'pk': self.object.pk})
 
 class PostDeleteView(DeleteView):
-    model = Post
+    model = Post   
     template_name = 'app/post_delete.html'
-    success_url = reverse_lazy('post_list')
-
-
+    
+    success_url = reverse_lazy('post')

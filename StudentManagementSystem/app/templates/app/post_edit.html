@@ -1,0 +1,16 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+
+<div class="card">
+    <h1>Edit Post</h1>
+    <form action="{% url 'post_update' post.pk%}" method="post">
+    <a href="{% url 'post' %}" class="btn-back">← Back</a>
+       
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Save">
+</form>  
+</div>
+ 
+{% endblock %}

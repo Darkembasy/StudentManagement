@@ -1,12 +1,185 @@
 {% extends 'app/base.html' %}
+
 {% block content %}
-<h2>{% if object %}Edit{% else %}Add{% endif %} Subject</h2>
+<style>
+/* Subject Form Styling */
+.subject-form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">💾 Save</button>
-</form>
+.subject-form-container h2 {
+  color: #2c3e50;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 0.5rem;
+}
 
-<a href="{% if object %}{% url 'subject_list' object.student.id %}{% else %}{% url 'student_list' %}{% endif %}">⬅ Cancel</a>
+/* Form styling */
+.subject-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Form field styling */
+.subject-form p {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.subject-form label {
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.subject-form input,
+.subject-form select,
+.subject-form textarea {
+  padding: 0.75rem;
+  border: 2px solid #e0e6ed;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: #ffffff;
+}
+
+.subject-form input:focus,
+.subject-form select:focus,
+.subject-form textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.subject-form input:hover,
+.subject-form select:hover,
+.subject-form textarea:hover {
+  border-color: #bdc3c7;
+}
+
+/* Error styling */
+.subject-form .errorlist {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0 0 0;
+}
+
+.subject-form .errorlist li {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Button styling */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.btn-save {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: white;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.btn-save:hover {
+  background: linear-gradient(135deg, #229954, #27ae60);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+.btn-save:active {
+  transform: translateY(0);
+}
+
+.btn-cancel {
+  color: #7f8c8d;
+  text-decoration: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 2px solid #bdc3c7;
+}
+
+.btn-cancel:hover {
+  color: #34495e;
+  background-color: #ecf0f1;
+  border-color: #95a5a6;
+  text-decoration: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .subject-form-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .subject-form-container h2 {
+    font-size: 1.5rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .btn-save,
+  .btn-cancel {
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+/* Help text styling */
+.subject-form .helptext {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+</style>
+
+<div class="subject-form-container">
+  <h2>{% if object %}Edit{% else %}Add{% endif %} Subject</h2>
+  
+  <form method="post" class="subject-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <div class="form-actions">
+      <button type="submit" class="btn-save">💾 Save</button>
+      <a href="{% if object %}{% url 'subject_list' object.student.id %}{% else %}{% url 'student_list' %}{% endif %}" class="btn-cancel">⬅ Cancel</a>
+    </div>
+  </form>
+</div>
 {% endblock %}

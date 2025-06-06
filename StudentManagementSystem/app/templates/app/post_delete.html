@@ -1,0 +1,64 @@
+{% extends 'app/base.html' %}
+{% block content %}
+<style>
+    .card {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 3rem auto;
+        text-align: center;
+    }
+
+    .card h1 {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .card p {
+        font-size: 1.1rem;
+        margin: 1.5rem 0;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+        padding: 0.6rem 1.4rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: #bb2d3b;
+    }
+
+    .btn-cancel {
+        display: inline-block;
+        margin-top: 1rem;
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .btn-cancel:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="card">
+    <h1>Delete Post</h1>
+
+    <form action="{% url 'post_delete' post.pk %}" method="post">      
+        {% csrf_token %}
+        <p>Are you sure you want to delete <strong>{{ post.title }}</strong>?</p>
+        <input type="submit" value="Confirm Delete" class="btn-danger">
+    </form>
+
+    <a href="{% url 'post_detail' post.pk %}" class="btn-cancel">Cancel</a>
+</div>
+{% endblock %}
