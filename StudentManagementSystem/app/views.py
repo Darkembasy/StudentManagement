@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Q
 
 # Create your views here.
 def loginPage(request):
@@ -99,12 +100,13 @@ class SubjectDeleteView(DeleteView):
     def get_success_url(self):
         return reverse('subject_list', kwargs={'student_id': self.object.student.id})
 
+
 class GradeListView(ListView):
     model = Grade
     template_name = 'app/grade_list.html'
     context_object_name = 'grades'
     paginate_by = 20
-    
+
     def get_queryset(self):
         # Always start with all grades, optimized with select_related
         queryset = Grade.objects.all().select_related('subject', 'subject__student')
@@ -118,8 +120,7 @@ class GradeListView(ListView):
                 Q(subject__student__first_name__icontains=search_query) |
                 Q(subject__student__last_name__icontains=search_query) |
                 Q(subject__student__student_id__icontains=search_query) |
-                Q(subject__name__icontains=search_query) |
-                Q(subject__code__icontains=search_query)
+                Q(subject__name__icontains=search_query)
             ).distinct()
         
         return queryset.order_by('subject__student__last_name', 'subject__student__first_name', 'subject__name')
@@ -136,7 +137,7 @@ class GradeDetailView(DetailView):
 
 class GradeCreateView(CreateView):
     model = Grade
-    fields = ['subject', 'activity', 'quiz', 'mid_term_exam','final_exam','avg_grade']
+    fields = ['student','subject', 'activity', 'quiz', 'mid_term_exam','final_exam','avg_grade']
     template_name = 'app/grade_form.html'
     success_url = reverse_lazy('student_list')  # or redirect to grade list if you have one
 

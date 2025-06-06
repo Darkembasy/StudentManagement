@@ -23,6 +23,7 @@ class Subject(models.Model):
         return self.name
 
 class Grade(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades')
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='grades')
     activity = models.FloatField()
     quiz = models.FloatField()
